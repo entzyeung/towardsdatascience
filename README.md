@@ -1,1 +1,1 @@
-# Towards Data Science
+# TowardsDataScience / TowardsAI
