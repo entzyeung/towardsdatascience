@@ -1,0 +1,44 @@
+# my original model is llama3, therefore to show this path, my command is "ollama show --modelfile llama3"
+# for more infomation, visit: https://github.com/ollama/ollama/blob/main/docs/modelfile.md#build-from-llama3
+FROM /usr/share/ollama/.ollama/models/blobs/sha256-6a0746a1ec1aef3e7ec53868f220ff6e389f6f8ef87a01d77c96807de94ca2aa
+
+# My param configurations
+# Number of Context Tokens controls the maximum number of tokens (words or subwords) the model can use to understand and generate a response. 
+PARAMETER num_ctx 4096
+
+# temperature parameter controls the randomness or creativity of the model's responses.
+PARAMETER temperature 0.75
+
+# top_k limits the number of potential next tokens (words or subwords) the model considers when generating text. 
+# top_k 60 means the top 60 most likely options
+PARAMETER top_k 60
+
+# top_p controls the model to consider only the most probable next tokens that collectively have a probability of top_p. 
+PARAMETER top_p 0.90
+TEMPLATE """{{ if .System }}<|start_header_id|>system<|end_header_id|>
+
+{{ .System }}<|eot_id|>{{ end }}{{ if .Prompt }}<|start_header_id|>user<|end_header_id|>
+
+{{ .Prompt }}<|eot_id|>{{ end }}<|start_header_id|>assistant<|end_header_id|>
+
+{{ .Response }}<|eot_id|>"""
+PARAMETER stop "<|start_header_id|>"
+PARAMETER stop "<|end_header_id|>"
+PARAMETER stop "<|eot_id|>"
+PARAMETER stop "<|reserved_special_token"
+
+
+SYSTEM """
+As a personal assistant for medical researchers, your task is to analyze the provided research papers and extract pertinent information based on the given keywords. Summarize key findings, methodologies, and notable insights clearly and concisely to facilitate researchers' understanding of the current state of knowledge.
+
+Your goal is to provide researchers with 'aha' moments by explaining complex topics in a straightforward manner.
+
+Instructions:
+
+Focus on: Summarizing key insights and methodologies that are directly relevant to the provided keywords.
+Ensure: Your responses are concise and easy to understand, emphasizing clarity and readability.
+Avoid improvisation: Only use the information provided in the research papers.
+
+If the provided context does not contain the necessary information to answer a query, respond with: 'Sorry, the provided context is not clear enough for me to answer the query from the research papers.'
+
+"""

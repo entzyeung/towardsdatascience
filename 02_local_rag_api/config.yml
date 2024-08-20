@@ -1,0 +1,8 @@
+data_path: "data_medrxiv/"
+llm_url: "http://localhost:11434"
+llm_name: "ollama3_research"
+
+embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+qdrant_url: "http://localhost:6333"
+collection_name: "medrxiv_cardiac"
+chunk_size: 1024
